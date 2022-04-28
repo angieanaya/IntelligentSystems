@@ -5,13 +5,11 @@
 @Version :   1.0
 @Desc    :   Program that implements the K Nearest Neighbors algorithm from scratch to predict breast cancer.
 '''
-
 import numpy as np
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 from prettytable import PrettyTable
-from time import perf_counter
 
 def encoder(column):
     """
@@ -244,11 +242,11 @@ def get_k(X_train, y_train, X_test, y_test):
     plt.title('Error Rate - K Value')
     plt.xlabel('K Value')
     plt.ylabel('Mean Error')
-    plt.savefig('optimal_k.png')
+    plt.savefig('IntelligentSystems/GenerativeVSDiscriminative/results/optimal_k.png')
     return optimal_k
-start = perf_counter()
+
 # Loading the dataset
-dataset = pd.read_csv("/Users/angi_anaya/Documents/I S C/8/SISTEMAS INTELIGENTES/SecondDelivery/data.csv")
+dataset = pd.read_csv("IntelligentSystems/GenerativeVSDiscriminative/data.csv")
 
 # Preprocessing dataset
 dataset['diagnosis'] = encoder(dataset['diagnosis']) 
@@ -256,17 +254,21 @@ dataset = dataset.iloc[: , :-1]
 dataset = dataset.iloc[: , 1:]
 
 # Dividing dataset into features and labels
-#feature_columns = ['concave points_worst', 'perimeter_worst', 'radius_worst', 'concave points_mean']
 feature_columns = ['concave points_worst', 'perimeter_worst', 'concave points_mean']
 X = dataset[feature_columns]
-#X = dataset.loc[:, dataset.columns != "diagnosis"] # Uses the whole dataset as features except for the target column
+
+# USING THE WHOLE DATASET
+#X = dataset.loc[:, dataset.columns != "diagnosis"]
+
 y = dataset['diagnosis']
 
 # Splitting data
 X_train, y_train, X_test, y_test = split(X, y, 0.8)
 
+# TO GET THE OPTIMAL VALUE OF K
 #optimal_k = get_k(X_train, y_train, X_test, y_test)
-optimal_k = 4
+
+optimal_k = 4 # SINCE I KNOW THE OPTIMAL VALUE FOR K IS 4
 
 #Applying the KNN algorithm from scratch 
 y_pred = predict(X_train,y_train,X_test, optimal_k)
@@ -280,8 +282,7 @@ ax.set_xlabel('Predicted labels')
 ax.set_ylabel('True labels')
 ax.xaxis.set_ticklabels(['Malign', 'Benign']) 
 ax.yaxis.set_ticklabels(['Malign', 'Benign'])
-plt.savefig('KNN_confusion_matrix_.png')
-#plt.show()
+plt.savefig('IntelligentSystems/GenerativeVSDiscriminative/results/KNN_confusion_matrix_.png')
 
 # Get and display metrics from model
 accuracy = "{:.2f}".format(get_accuracy(y_test, y_pred))
@@ -294,7 +295,5 @@ metrics.add_row([accuracy+" %", precision+" %", recall+" %"])
 title = f"Metrics for the K-nearest neighbor algorithm with K = {optimal_k}"
 table = metrics.get_string(title=title)
 print(table)
-with open('metrics_KNN.txt', 'w') as f:
+with open('IntelligentSystems/GenerativeVSDiscriminative/results/metrics_KNN.txt', 'w') as f:
     f.write(table)
-end = perf_counter()
-print("Time elapsed: ", end - start)

@@ -5,13 +5,11 @@
 @Version :   1.0
 @Desc    :   Program that implements the Naive Bayes algorithm with a normal distribution from scratch to predict breast cancer.
 '''
-from time import perf_counter
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from prettytable import PrettyTable
-from time import perf_counter
 
 def encoder(column):
     """
@@ -220,9 +218,8 @@ def get_recall(matrix):
     recall_metric = tp/ (tp + fn) * 100
     return recall_metric
 
-start = perf_counter()
 # Loading the dataset
-dataset = pd.read_csv("/Users/angi_anaya/Documents/I S C/8/SISTEMAS INTELIGENTES/SecondDelivery/data.csv")
+dataset = pd.read_csv("IntelligentSystems/GenerativeVSDiscriminative/data.csv")
 
 # Preprocessing dataset
 label = "diagnosis"
@@ -236,8 +233,7 @@ train, test = split(dataset, 0.8)
 X_test = test.loc[:, test.columns != label].values
 y_test = test[label].values
 
-#y_pred = predict(train, X_test, label)
-y_pred = predict(train, [[10.34, 3.45, 5.67]], label)
+y_pred = predict(train, X_test, label)
 
 # Get and display metrics from model
 confusion_matrix = confusion_matrix(y_test, y_pred)
@@ -251,7 +247,7 @@ metrics.add_row([accuracy+" %", precision+" %", recall+" %"])
 title = f"Metrics for the Naive Bayes algorithm with the Gaussian Distribution"
 table = metrics.get_string(title=title)
 print(table)
-with open('metrics_NaiveBayes.txt', 'w') as f:
+with open('IntelligentSystems/GenerativeVSDiscriminative/results/metrics_NaiveBayes.txt', 'w') as f:
     f.write(table)
 
 # Plot confusion matrix
@@ -262,8 +258,4 @@ ax.set_xlabel('Predicted labels')
 ax.set_ylabel('True labels')
 ax.xaxis.set_ticklabels(['Malign', 'Benign']) 
 ax.yaxis.set_ticklabels(['Malign', 'Benign'])
-plt.savefig('NB_confusion_matrix.png')
-#plt.show()
-
-end = perf_counter()
-print("Time elapsed: ", end - start)
+plt.savefig('IntelligentSystems/GenerativeVSDiscriminative/results/NB_confusion_matrix.png')
